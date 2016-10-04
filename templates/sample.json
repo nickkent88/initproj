@@ -5,6 +5,7 @@
 {
 	"dir": 
 	{
+		// Root directory of project.
 		"name": "myproject",
 		"file": "README",
 		"file": "LICENSE",
@@ -12,23 +13,28 @@
 		"file": "setup.py",
 		"dir": 
 		{
+			// Main script.
 			"name": "bin"
 		},
 		"dir": 
 		{
+			// Sphinx doc files.
 			"name": "docs"
 		},
 		"dir": 
 		{
+			// Data and other sundry stuff.
 			"name": "fixtures"
 		},
 		"dir": 
 		{
+			// Source directory.
 			"name": "foo",
 			"file": "__init__.py"
 		},
 		"dir": 
 		{
+			// Test files.
 			"name": "tests",
 			"file": "__init__.py"
 		},
