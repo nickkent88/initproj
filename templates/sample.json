@@ -1,0 +1,37 @@
+// Sample from https://districtdatalabs.silvrback.com/how-to-develop-quality-python-code
+// Two types: dir and file.
+// Directories must contain "name" string, followed by contents.
+
+{
+	"dir": 
+	{
+		"name": "myproject",
+		"file": "README",
+		"file": "LICENSE",
+		"file": "requirements.txt",
+		"file": "setup.py",
+		"dir": 
+		{
+			"name": "bin"
+		},
+		"dir": 
+		{
+			"name": "docs"
+		},
+		"dir": 
+		{
+			"name": "fixtures"
+		},
+		"dir": 
+		{
+			"name": "foo",
+			"file": "__init__.py"
+		},
+		"dir": 
+		{
+			"name": "tests",
+			"file": "__init__.py"
+		},
+	}
+
+}
