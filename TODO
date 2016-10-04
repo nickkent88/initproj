@@ -1,0 +1,8 @@
+CORE
+1. Create sample template.
+2. Figure out if we're using recursion or not.
+
+
+FURTHER
+1. Read output from `tree`.
+2. Produce `.gitignore` and `LICENSE` files, a la github.
