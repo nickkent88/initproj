@@ -1,43 +1,25 @@
-// Sample from https://districtdatalabs.silvrback.com/how-to-develop-quality-python-code
-// Two types: dir and file.
-// Directories must contain "name" string, followed by contents.
-
-{
-	"dir": 
+{"myproject": 
 	{
-		// Root directory of project.
-		"name": "myproject",
-		"file": "README",
-		"file": "LICENSE",
-		"file": "requirements.txt",
-		"file": "setup.py",
-		"dir": 
+		"README": "",
+		"LICENSE": "",
+		"requirements.txt": "",
+		"setup.py": "",
+		"bin": 
 		{
-			// Main script.
-			"name": "bin"
 		},
-		"dir": 
+		"docs": 
 		{
-			// Sphinx doc files.
-			"name": "docs"
 		},
-		"dir": 
+		"fixtures": 
 		{
-			// Data and other sundry stuff.
-			"name": "fixtures"
 		},
-		"dir": 
+		"foo": 
 		{
-			// Source directory.
-			"name": "foo",
-			"file": "__init__.py"
+			"__init__.py": ""
 		},
-		"dir": 
+		"tests": 
 		{
-			// Test files.
-			"name": "tests",
-			"file": "__init__.py"
-		},
+			"__init__.py": ""
+		}
 	}
-
 }
