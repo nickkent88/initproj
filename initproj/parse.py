@@ -1,6 +1,7 @@
 import json
 import os
-# import simplejson
+
+from shutil import copyfile
 
 class TreeParser(object):
     """docstring for TreeParser"""
@@ -9,10 +10,11 @@ class TreeParser(object):
         self.path_stack = [current_dir]
         with open(json_file_path) as json_file:
             self.tree_dict = json.load(json_file)
-            # When we add a directory, we will push its name on the stack
-            # When we leave the directory, we will pop it
-            # We get the path at which files are being created by joining the elements
-            # of the stack
+            # Dispatch dict can be used to handle certain file types in special 
+            # ways.
+            self.file_dispatch = {
+                ".gitignore": self.make_gitignore
+            }
 
 # Parse tree recursively
     def make_structure(self):
@@ -20,29 +22,48 @@ class TreeParser(object):
 
     def parse_tree(self, json_dict):        
         for key, value in sorted(json_dict.items()):
-            if isinstance(value, dict):
+            if isinstance(value, dict): # A directory
                 dirname = key
                 self.make_directory(dirname, value)
-            if isinstance(value, basestring):
+            else: # A file
                 filename = key
-                self.make_file(filename)
+                _, extension = os.path.splitext(' ' + filename)
+                print(extension)
+                handle_file = self.file_dispatch.get(
+                    extension, self.make_file)
+                option = value
+                handle_file(filename, option)
 
     def make_directory(self, dirname, json_dict):
         self.path_stack.append(dirname)
         path = os.path.join(*self.path_stack)
-        if not os.path.isdir(dirname):
+        if not os.path.isdir(path):
             print("Dir: {}".format(path))
             os.mkdir(path)
+        else:
+            print("Directory {} already exists.".format(path))
         self.parse_tree(json_dict)
         self.path_stack.pop()
         
 
-    def make_file(self, filename):
-        self.path_stack.append(filename)
-        path = os.path.join(*self.path_stack)
-        print("File: {}".format(path))
+    def make_file(self, filename, option=None):
+        path = self.path_from_stack(filename)
+        if not os.path.isfile(path):
+            print("File: {}".format(path))
+        else:
+            print("File {} already exists.".format(path))
         open(path, 'a').close()
         self.path_stack.pop()
+
+    def make_gitignore(self, filename, language=None):
+        print("Making {}.gitignore.".format(language))
+
+
+    def path_from_stack(self, filename):
+        self.path_stack.append(filename)
+        return os.path.join(*self.path_stack)
+
+
 
 if __name__ == "__main__":
     parsey_mc_parseface = TreeParser(r'.', r'../templates/sample.json')
