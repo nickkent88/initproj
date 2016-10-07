@@ -1,7 +1,16 @@
 import json
+import logging
 import os
 
 from shutil import copyfile
+
+GITIGNORE_DIR = "../fixtures/gitignores/"
+LICENSE_DIR = "../fixtures/licenses/"
+
+# FORMAT = '%(asctime)-15s %(clientip)s %(user)-8s %(message)s'
+# logger.basicConfig(format=FORMAT, level=logger.DEBUG)
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 class TreeParser(object):
     """docstring for TreeParser"""
@@ -18,9 +27,12 @@ class TreeParser(object):
 
 # Parse tree recursively
     def make_structure(self):
-            self.parse_tree(self.tree_dict)
+        logger.debug('make_structure()')
+        self.parse_tree(self.tree_dict)
 
-    def parse_tree(self, json_dict):        
+    def parse_tree(self, json_dict):  
+        logger.debug('parse_tree()')
+
         for key, value in sorted(json_dict.items()):
             if isinstance(value, dict): # A directory
                 dirname = key
@@ -28,36 +40,42 @@ class TreeParser(object):
             else: # A file
                 filename = key
                 _, extension = os.path.splitext(' ' + filename)
-                print(extension)
+                logger.debug(extension)
                 handle_file = self.file_dispatch.get(
                     extension, self.make_file)
                 option = value
                 handle_file(filename, option)
 
     def make_directory(self, dirname, json_dict):
-        self.path_stack.append(dirname)
-        path = os.path.join(*self.path_stack)
+        logger.debug('make_directory()')
+        path = self.path_from_stack(dirname)
         if not os.path.isdir(path):
-            print("Dir: {}".format(path))
+            logger.debug("Dir: {}".format(path))
             os.mkdir(path)
         else:
-            print("Directory {} already exists.".format(path))
+            logger.debug("Directory {} already exists.".format(path))
         self.parse_tree(json_dict)
         self.path_stack.pop()
         
 
     def make_file(self, filename, option=None):
+        logger.debug('make_file()')
         path = self.path_from_stack(filename)
         if not os.path.isfile(path):
-            print("File: {}".format(path))
+            logger.info("File: {}".format(path))
         else:
-            print("File {} already exists.".format(path))
+            logger.info("File {} already exists.".format(path))
         open(path, 'a').close()
         self.path_stack.pop()
 
     def make_gitignore(self, filename, language=None):
-        print("Making {}.gitignore.".format(language))
-
+        logger.debug('make_gitignore()')
+        logger.debug(filename)
+        logger.info("Making {}.gitignore.".format(language))
+        # filename = '.'.join((language, 'gitignore'))
+        # gitignore_path = os.path.join(GITIGNORE_DIR, filename)
+        # path = self.path_from_stack(filename)
+        # copyfile(gitignore_path, path)
 
     def path_from_stack(self, filename):
         self.path_stack.append(filename)
